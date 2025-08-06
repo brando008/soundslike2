@@ -11,10 +11,8 @@ from ner.model.load_model_from_s3 import load_model_from_s3
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  # root
 
 # model_path = os.path.join(BASE_DIR, "models", "distilbert-ner")
-model_path = load_model_from_s3()
-
-tokenizer = AutoTokenizer.from_pretrained(model_path)
-model = AutoModelForTokenClassification.from_pretrained(model_path)
+tokenizer = AutoTokenizer.from_pretrained("distilbert-base-uncased")
+model = load_model_from_s3()
 
 label_list = ["O", "B-MOOD", "B-SONG", "I-SONG", "B-ARTIST", "I-ARTIST"]
 
