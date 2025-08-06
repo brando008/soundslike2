@@ -27,7 +27,7 @@ def load_model_from_s3(model_cls="distilbert-base-uncased"):
     state_dict = load_file(temp_path)
 
     # Load model config
-    config = AutoConfig.from_pretrained(model_cls)
+    config = AutoConfig.from_pretrained(model_cls, num_labels=6)
 
     # Initialize model with config (no weights)
     model = AutoModelForTokenClassification.from_config(config)
