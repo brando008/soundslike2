@@ -12,15 +12,10 @@ def get_s3_client():
     )
 
 def load_model_from_s3(
-    bucket_name=None,   # default to secrets if None
-    key=None,
     model_cls="distilbert-base-uncased",
 ):
-    if bucket_name is None:
-        bucket_name = st.secrets["S3_BUCKET_NAME"]
-    if key is None:
-        folder = st.secrets.get("S3_FOLDER", "")
-        key = f"{folder}model.safetensors"
+    bucket_name = "sounds-like"
+    key = "data/model.safetensors"
 
     s3 = get_s3_client()
 
