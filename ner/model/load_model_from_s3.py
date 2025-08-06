@@ -2,6 +2,7 @@ import boto3
 import torch
 import tempfile
 import streamlit as st
+from safetensors.torch import load_file
 
 def get_s3_client():
     return boto3.client(
@@ -25,9 +26,10 @@ def load_model_from_s3(
 
     from transformers import AutoModelForTokenClassification
 
+    state_dict = load_file(temp_path)
+
     model = AutoModelForTokenClassification.from_pretrained(
-        model_cls,
-        local_files_only=True,
-        state_dict=torch.load(temp_path),
+    model_cls,
+    state_dict=state_dict,
     )
     return model
