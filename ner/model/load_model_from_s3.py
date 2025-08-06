@@ -13,7 +13,7 @@ def get_s3_client():
         region_name=st.secrets["AWS_REGION"],
     )
 
-def load_model_from_s3(model_cls="distilbert-base-uncased"):
+def load_model_from_s3(model_cls="distilbert-base-uncased",t_type=torch.float16):
     bucket_name = "sounds-like"
     key = "data/model.safetensors"
 
@@ -27,7 +27,7 @@ def load_model_from_s3(model_cls="distilbert-base-uncased"):
     state_dict = load_file(temp_path)
 
     # Load model config
-    config = AutoConfig.from_pretrained(model_cls, num_labels=6)
+    config = AutoConfig.from_pretrained(model_cls, torch_dtype=t_type, num_labels=6)
 
     # Initialize model with config (no weights)
     model = AutoModelForTokenClassification.from_config(config)

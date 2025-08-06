@@ -2,6 +2,7 @@ import torch
 from transformers import AutoTokenizer, AutoModelForTokenClassification
 import os
 from ner.model.load_model_from_s3 import load_model_from_s3
+import streamlit as st
 """
     Goes through the prompt and tokenizes it. Runs it through the trained NER model, and takes out
     inputs which can be labeled with BIO. It then puts them in their appropriate entity and flushes it.
@@ -11,12 +12,16 @@ from ner.model.load_model_from_s3 import load_model_from_s3
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  # root
 
 # model_path = os.path.join(BASE_DIR, "models", "distilbert-ner")
-tokenizer = AutoTokenizer.from_pretrained("distilbert-base-uncased")
-model = load_model_from_s3()
+@st.cache_resource
+def get_ner_model():
+    model = load_model_from_s3()
+    tokenizer = AutoTokenizer.from_pretrained("distilbert-base-uncased")
+    return model, tokenizer
 
 label_list = ["O", "B-MOOD", "B-SONG", "I-SONG", "B-ARTIST", "I-ARTIST"]
 
 def ner_pipeline(text):
+    model, tokenizer = get_ner_model()
     # Tokenize input text
     inputs = tokenizer(text, return_tensors="pt", truncation=True, is_split_into_words=False)
 
