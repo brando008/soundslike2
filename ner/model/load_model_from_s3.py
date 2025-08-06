@@ -5,12 +5,11 @@ import tempfile
 
 def load_model_from_s3(
     bucket_name="sounds-like",
-    key="model.safetensors",
+    key="models/model.safetensors",  # ← update this if needed
     model_cls="distilbert-base-uncased",
 ):
     from transformers import AutoModelForTokenClassification, AutoTokenizer
 
-    # Create a temporary file to hold the downloaded model
     with tempfile.NamedTemporaryFile(delete=False) as temp_file:
         s3 = boto3.client("s3")
         s3.download_fileobj(bucket_name, key, temp_file)
